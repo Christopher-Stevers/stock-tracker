@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 const App = () => {
   let [userInput, updateUserInput] = useState("TSLA");
-  const [submittedInput, updateSubmittedInput] = useState("CORN");
+  const [submittedInput, updateSubmittedInput] = useState("TSLA");
   
   const [currentPrice, updateCurrentPrice] = useState("");
 
