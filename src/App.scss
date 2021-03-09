@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Share+Tech+Mono&display=swap');
+
+
+*{box-sizing: border-box;
+color: inherit;
+font-family: inherit;
+outline: none;}
+#root{
+justify-content: center;
+align-content: center;
+  display: grid;
+
+width: 100%;
+font-family: 'Share Tech Mono', monospace;
+  *{margin: 0px;}
+ 
+font-size: 24px;}
+body{background-color: #002244;}
+*{font-size: 1rem;
+  margin-top: 8px;
+  margin: 8px;
+z-index: 1;}
+.low{fill: #002244;
+}
+.high{fill: black;
+  opacity: .5;
+  &:hover{
+opacity: 0.75;}
+}
+.bottom{fill: white;}
+.cornChart{
+width: 400px;
+max-width: 100%;
+overflow-x: scroll;}
+//.soyChart{width: 80px;}
+.graphContainer{
+ 
+background-color: white;
+padding: 50px;
+  max-width: 100%;}
+label{color: white;}
+figure{display: flex;}
+h2{padding: 40px;
+  font-weight: 400;
+font-size: 1rem;}
+.centerText{font-size: 20px;
+width: 100%; 
+font-weight: 400;
+text-align: center;}
