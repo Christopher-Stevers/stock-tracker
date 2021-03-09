@@ -1,4 +1,4 @@
-import logo from "./logo.svg";
+
 import "./App.css";
 import * as d3 from "d3";
 import { useState, useEffect } from "react";
@@ -9,8 +9,6 @@ const App = () => {
   
   const [currentPrice, updateCurrentPrice] = useState("");
 
-  let corn;
-  const [product, updateProduct] = useState(corn);
   const newUserInput = (e) => {
     updateUserInput(e.target.value);
   };
@@ -36,7 +34,7 @@ const App = () => {
       return stonks;
     }
     fetchCurrentJSON().then((stonks) => {
-      if (stonks.status == "error") {
+      if (stonks.status === "error") {
         updateCurrentPrice("");
         return false;
       } else {
@@ -45,7 +43,7 @@ const App = () => {
     });
 
     fetchStonksJSON().then((stonks) => {
-      if (stonks.status == "error") {
+      if (stonks.status === "error") {
         updateSubmittedInput( "Sorry, ticker not found");
         document.querySelector(".cornChart").scrollLeft = 2000;
         return false;
@@ -69,7 +67,6 @@ const App = () => {
 
     const highData = data.map((elem) => parseFloat(elem.high));
 
-    const scale = d3.scaleLinear();
     const padding = 0;
     const bottomPadding = 50;
     let iW = 50;
@@ -149,12 +146,13 @@ const App = () => {
     document.querySelector(".cornChart").scrollLeft = 1000;
     console.log(document.querySelector(".cornChart").scrollLeft);
   };
-  useEffect(() => {
-    getData(userInput);
+  const onStart=()=>{getData(userInput);
     alert(
       "Data is taken from https://twelvedata.com/ I cannot guarantee its accuracy."
-    );
-  }, []);
+    );}
+  useEffect(() => {
+    onStart();
+  });
 
   return (
     <>
