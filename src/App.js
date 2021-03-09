@@ -146,13 +146,13 @@ const App = () => {
     document.querySelector(".cornChart").scrollLeft = 1000;
     console.log(document.querySelector(".cornChart").scrollLeft);
   };
-  const onStart=()=>{getData(userInput);
-    alert(
-      "Data is taken from https://twelvedata.com/ I cannot guarantee its accuracy."
-    );}
   useEffect(() => {
-    onStart();
-  });
+    getData(userInput);
+      alert(
+        "Data is taken from https://twelvedata.com/ I cannot guarantee its accuracy."
+      );
+      //eslint-disable-next-line
+  },[]);
 
   return (
     <>
