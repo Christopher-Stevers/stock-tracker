@@ -12,4 +12,4 @@ To run this project locally  run npm start.
 
 Address
 ---
-https://stonksyee.tk
+https://fervent-bassi-16f84e.netlify.app/
