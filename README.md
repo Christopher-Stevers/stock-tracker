@@ -8,7 +8,7 @@ A bar graph generator built with d3.js and the 12data api.
 
 Local Development
 ---
-To run this project locally  run npm start
+To run this project locally  run npm start.
 
 Address
 ---
