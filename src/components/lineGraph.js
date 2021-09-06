@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import * as d3 from "d3";
-import styles from './lineGraph.module.scss'
-export default function LineGraph(props, propwidth, propheight) {
+import styles from './lineGraph.module.css'
+export default  function LineGraph(props, propwidth, propheight) {
     const drawChart=()=>{
+        console.log("yeet")
+        console.log(props);
         //The next 8 lines are taken from https://www.d3-graph-gallery.com/graph/line_basic.html
         const margin = {top: 10, right: 30, bottom: 30, left: 60};
     const width = propwidth - margin.left - margin.right;
@@ -21,7 +23,14 @@ export default function LineGraph(props, propwidth, propheight) {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale));
         const closeArr=props.values.map(elem=>elem.close);
+        const yMin=(d3.min(closeArr)-100>0)?d3.min(closeArr)-100: - 0;
+        
+        const yMax=(d3.max(closeArr)+100>0)?d3.max(closeArr)+100: - 0;
+        console.log(d3.min(closeArr));
+        console.log(d3.max(closeArr));
         const yScale=d3.scaleLinear()
+
+        
         .domain([d3.min(closeArr), d3.max(closeArr) ])
         .range([height, 0]);
         svg.append("g")
@@ -32,7 +41,6 @@ export default function LineGraph(props, propwidth, propheight) {
         .attr("stroke", "red")
         .attr("stroke-width", 1.5)
         .attr("d", d3.line().x(function(d){
-            console.log(d);
             return xScale(new Date(d.datetime))})
         .y(function(d){return yScale(d.close)}))
    }

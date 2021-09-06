@@ -1,16 +1,48 @@
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import "./Home.css";
+import * as Sample from"./sample.json"
+import LineGraph from "./components/lineGraph"
 import * as d3 from "d3";
 import { useState, useEffect } from "react";
-import styles from './barGraph.module.scss'
 
-export default function BarGraph(){
+const Home = () => {
+  console.log(Sample);
   let [userInput, updateUserInput] = useState("TSLA");
   const [submittedInput, updateSubmittedInput] = useState("TSLA");
+  
   
   const [currentPrice, updateCurrentPrice] = useState("");
 
   const newUserInput = (e) => {
     updateUserInput(e.target.value);
   };
+
+
+  
+  useEffect(()=>{
+        
+  async function fetchData(){  const ticker = userInput.toUpperCase();
+    const response = await fetch(
+      "https://api.twelvedata.com/time_series?symbol=" +
+        ticker +
+        "&interval=1week&apikey=c2133a76aac7496da1f8e1e4f62ba9a2"
+    );
+    let responseObj=await response.json();
+    console.log(responseObj);
+    
+    if(responseObj.code===429){
+      console.log(419);
+    responseObj=Sample.default;}
+ const width=600;
+ const height=400;
+     
+     if(document.querySelectorAll(".chart")[1])document.getQuerySelector(".chart")[1].remove();
+ LineGraph(responseObj, width, height);
+    }
+    fetchData();
+
+},[]);
   //thank you to https://dmitripavlutin.com/javascript-fetch-async-await/ for explaing async await, some of the fetcshing was done with his code.
   function getData(userInput) {
     const ticker = userInput.toUpperCase();
@@ -44,20 +76,19 @@ export default function BarGraph(){
     fetchStonksJSON().then((stonks) => {
       if (stonks.status === "error") {
         updateSubmittedInput( "Sorry, ticker not found");
-        document.querySelector("#cornChart").scrollLeft = 2000;
+        document.querySelector(".cornChart").scrollLeft = 2000;
         return false;
       } else {
         document.getElementById("chart").remove();
         document.getElementById("scale").remove();
-        drawChart(stonks.values, "corn", "#cornChart");
+        drawChart(stonks.values, "corn", ".cornChart");
         updateSubmittedInput(stonks.meta.symbol);
         /*document.getElementById("chart").remove();
      document.getElementById("scale").remove();*/
         updateSubmittedInput(userInput);
         updateUserInput("");
 
-        
-        document.querySelector("#cornChart").scrollLeft = 2000;
+        document.querySelector(".cornChart").scrollLeft = 2000;
       } // fetched movies
     });
   }
@@ -68,7 +99,7 @@ export default function BarGraph(){
 
     const padding = 0;
     const bottomPadding = 50;
-    let iW = 2;
+    let iW = 50;
     let w = iW * data.length;
     let h = 400;
     const yScale = d3
@@ -93,6 +124,18 @@ export default function BarGraph(){
       .attr("name", name)
       .attr("id", "chart");
     svg
+      .selectAll("rect.low")
+      .data(lowData)
+      .enter()
+      .append("rect")
+      .attr("width", iW)
+      .attr("height", (d, i) => {
+        return yScale(d);
+      })
+      .attr("y", (d, i) => h - yScale(d))
+      .attr("x", (d, i) => w - (i + 1) * iW + padding)
+      .attr("class", "low");
+    svg
       .selectAll("rect.high")
       .data(highData)
       .enter()
@@ -104,27 +147,14 @@ export default function BarGraph(){
       .attr("y", (d, i) => h - yScale(d))
       .attr("x", (d, i) => w - (i + 1) * iW + padding)
 
-      .attr("className", `${styles.high}`);
-    svg
-      .selectAll("rect.low")
-      .data(lowData)
-      .enter()
-      .append("rect")
-      .attr("fill", "blue")
-      .attr("width", iW)
-      .attr("height", (d, i) => {
-        return yScale(d);
-      })
-      .attr("y", (d, i) => h - yScale(d))
-      .attr("x", (d, i) => w - (i + 1) * iW + padding)
-      .attr("className", `${styles.low}`);
+      .attr("class", "high");
     svg
       .selectAll("text.bottom")
       .data(data)
       .enter()
       .append("text")
       .text((d, i) => d.datetime.slice(5))
-      .attr("className", `${styles.bottom}`)
+      .attr("class", "bottom")
       .attr("y", h - 20)
       .attr("x", (d, i) => w - (i + 1) * iW + padding);
     const yAxis = d3.axisLeft(axisScale);
@@ -142,15 +172,16 @@ export default function BarGraph(){
   const submitInput = (e) => {
     e.preventDefault();
     getData(userInput);
-    document.querySelector("#cornChart").scrollLeft = 1000;
+    document.querySelector(".cornChart").scrollLeft = 1000;
   };
   useEffect(() => {
     getData(userInput);
-      alert(
-        "Data is taken from https://twelvedata.com/ I cannot guarantee its accuracy."
-      );
+      //alert(
+      //  "Data is taken from https://twelvedata.com/ I cannot guarantee its accuracy."
+    //  );
       //eslint-disable-next-line
   },[]);
+
 
   return (
     <>
@@ -160,21 +191,27 @@ export default function BarGraph(){
         <input type="submit" onClick={submitInput}></input>
       </form>
 
-      <div className={styles.graphContainer}>
-        <figcaption  id="corn">
-          <h1 className={styles.centerText}> {submittedInput}</h1>
+      <div class="graphContainer">
+        <figcaption for="stockChart" id="corn">
+          <h1 class="centerText"> {submittedInput}</h1>
           <h2>{currentPrice}</h2>
-          <h2 className={styles.centerText}>Past 30 Weeks</h2>
+          <h2 class="centerText">Past 30 Weeks</h2>
         </figcaption>
         <figure name="stockChart">
-          <div className={styles.soyChart}>
+          <div class="soyChart">
             <div id="chart"></div>
           </div>
-          <div id="cornChart" className={styles.cornChart}>
+          <div class="cornChart">
             <div id="scale"></div>
           </div>
         </figure>
       </div>
+      
+      <figure id="lineGraph"></figure>
+        
     </>
+
   );
 };
+
+export default Home;
