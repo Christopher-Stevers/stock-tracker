@@ -23,15 +23,17 @@ export default  function LineGraph(props, propwidth, propheight) {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale));
         const closeArr=props.values.map(elem=>elem.close);
-        const yMin=(d3.min(closeArr)-100>0)?d3.min(closeArr)-100: - 0;
+        const yMin=(d3.min(closeArr)-100>0)?parseFloat(d3.min(closeArr))-100.0: - 0;
         
-        const yMax=(d3.max(closeArr)+100>0)?d3.max(closeArr)+100: - 0;
+        const yMax=(d3.max(closeArr)+100>0)? parseFloat(d3.max(closeArr))+100.0: - 0;
         console.log(d3.min(closeArr));
         console.log(d3.max(closeArr));
+        console.log(d3.min(closeArr));
+        console.log(yMax);
         const yScale=d3.scaleLinear()
 
         
-        .domain([d3.min(closeArr), d3.max(closeArr) ])
+        .domain([yMin, yMax ])
         .range([height, 0]);
         svg.append("g")
         .call(d3.axisLeft(yScale));
