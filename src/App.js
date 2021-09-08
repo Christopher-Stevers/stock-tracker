@@ -8,7 +8,8 @@ const App = () => {
   const [submittedInput, updateSubmittedInput] = useState("TSLA");
   
   const [currentPrice, updateCurrentPrice] = useState("");
-
+  const [overlayClasses, updateOverlayClasses]=useState("overlay");
+  const monthArr=["January", "February", "March","April", "May", "June", "July", "August", "September", "October", "November", "December"]
   const newUserInput = (e) => {
     updateUserInput(e.target.value);
   };
@@ -43,8 +44,11 @@ const App = () => {
     });
 
     fetchStonksJSON().then((stonks) => {
+      console.log(stonks);
       if (stonks.status === "error") {
         updateSubmittedInput( "Sorry, ticker not found");
+        
+      if(stonks.code){updateSubmittedInput( "Sorry, you've exceeded the api request limit, please wait a minute.");}
         document.querySelector(".cornChart").scrollLeft = 2000;
         return false;
       } else {
@@ -123,7 +127,13 @@ const App = () => {
       .data(data)
       .enter()
       .append("text")
-      .text((d, i) => d.datetime.slice(5))
+      .text((d, i) => {
+        const date= new Date(d.datetime);
+        const month=date.getMonth();
+        console.log(date.getDate());
+        const dayOfMonth=date.getDate();
+        const monthStr=(dayOfMonth<8)?monthArr[month]+" 1": "";
+        return monthStr})
       .attr("class", "bottom")
       .attr("y", h - 20)
       .attr("x", (d, i) => w - (i + 1) * iW + padding);
@@ -148,18 +158,20 @@ const App = () => {
   };
   useEffect(() => {
     getData(userInput);
-      alert(
-        "Data is taken from https://twelvedata.com/ I cannot guarantee its accuracy."
-      );
       //eslint-disable-next-line
   },[]);
 
   return (
     <>
+    
+    <div onClick={()=>updateOverlayClasses("kick")} className={overlayClasses}><div class="modal" onClick={(e)=>e.stopPropagation()}><button aria="visually hide" onClick={()=>updateOverlayClasses("kick")}>{ 	
+     '\u2716'}</button><h1>Stock Tracker</h1>
+    <p>Want a bar chart for a common stock? Enter your ticker above and get a bar chart for that stock's value over the past 30 weeks. </p>
+    <p>Data for this app is provided by the <a href="https://twelvedata.com/">twelvedata api</a>.</p></div></div>
       <form>
         <label>Stock Ticker:</label>
         <input value={userInput} onChange={newUserInput}></input>
-        <input type="submit" onClick={submitInput}></input>
+        <button type="submit" onClick={submitInput}>Get Chart</button>
       </form>
 
       <div class="graphContainer">

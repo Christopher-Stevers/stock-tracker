@@ -87,4 +87,66 @@ h2 {
   font-weight: 400;
   text-align: center;
 }
+
+.overlay{
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 100%;
+height: 100vh;}
+.modal{width: 350px;
+height: 300px;
+padding: 20px;
+background-color: #024;
+border: solid white 4px;
+border-radius: 20px;
+transition-duration: .5s;
+
+
+animation-name: "expand";
+animation-duration: .5s;}
+@keyframes expand {
+0%{transform: scale(.95)}
+100%{transform: scale(1)}
+
+}
+.modal>button{background-color: red;
+float: right;
+border-radius: 50%;
+outline: transparent;
+border: 3px solid white;
+width: 2rem;
+height: 2rem;
+color: white;
+cursor: pointer;
+transition-duration: .25s;
+
+
+background-color: #002244;}
+.modal>button:hover{
+  border-color: #710221;
+  background-color: #001133;
+  transform: scale(1.1);
+}
+.modal>h1{font-size: 2rem;
+color: white;}
+.modal>p{
+  padding: 1rem;
+  color: white;
+}
+/* Thanks to https://css-tricks.com/inclusively-hidden/#screen-reader-only for the following class*/
+.kick:not(:focus):not(:active) {
+  clip: rect(0 0 0 0); 
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap; 
+  width: 1px;
+}
 /*# sourceMappingURL=App.css.map */
