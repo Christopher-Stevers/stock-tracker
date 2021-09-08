@@ -13,16 +13,15 @@ const Home = () => {
   
   
   const [currentPrice, updateCurrentPrice] = useState("");
+  const [ticker, updateTicker]=useState("TSLA");
 
   const newUserInput = (e) => {
     updateUserInput(e.target.value);
   };
 
-
-  
-  useEffect(()=>{
-        
-  async function fetchData(){  const ticker = userInput.toUpperCase();
+async function fetchData(ticker){ 
+    
+    console.log(ticker);
     const response = await fetch(
       "https://api.twelvedata.com/time_series?symbol=" +
         ticker +
@@ -40,9 +39,13 @@ const Home = () => {
      if(document.querySelectorAll(".chart")[1])document.getQuerySelector(".chart")[1].remove();
  LineGraph(responseObj, width, height);
     }
-    fetchData();
+  
+  useEffect(()=>{
+        
+  
+    fetchData(ticker);
 
-},[]);
+},[ticker]);
   //thank you to https://dmitripavlutin.com/javascript-fetch-async-await/ for explaing async await, some of the fetcshing was done with his code.
   function getData(userInput) {
     const ticker = userInput.toUpperCase();
@@ -171,11 +174,13 @@ const Home = () => {
 
   const submitInput = (e) => {
     e.preventDefault();
+    updateTicker(userInput.toUpperCase());
+    fetchData(userInput);
     getData(userInput);
     document.querySelector(".cornChart").scrollLeft = 1000;
   };
   useEffect(() => {
-    getData(userInput);
+   getData(userInput);
       //alert(
       //  "Data is taken from https://twelvedata.com/ I cannot guarantee its accuracy."
     //  );
